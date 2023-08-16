@@ -1,6 +1,6 @@
 ﻿using Humanizer;
 
-namespace TestWebAPPEF.Models
+namespace BackEnd.Models
 {
     public class MovieDto
     {

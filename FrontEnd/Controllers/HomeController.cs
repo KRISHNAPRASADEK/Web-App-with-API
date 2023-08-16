@@ -1,8 +1,8 @@
-﻿using ClientSide.Models;
+﻿using FrontEnd.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
-namespace ClientSide.Controllers
+namespace FrontEnd.Controllers
 {
     public class HomeController : Controller
     {

@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BackEnd.Models;
+using BackEnd.Services;
 using Mapster;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using TestWebAPPEF.Data;
-using TestWebAPPEF.Models;
-using TestWebAPPEF.Services;
+using BackEnd.Data;
 
-namespace TestWebAPPEF.Controllers
+namespace BackEnd.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -31,9 +31,9 @@ namespace TestWebAPPEF.Controllers
 
             if (movie == null)
             {
-               return default;
+                return default;
             }
-            
+
             return movie;
         }
 
@@ -41,14 +41,14 @@ namespace TestWebAPPEF.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<MovieDto>> Get(int id)
         {
-            
-            var movie =await _movieInterface.Get(id);
-     
+
+            var movie = await _movieInterface.Get(id);
+
             if (movie == null)
             {
                 return NotFound();
             }
-           
+
 
             return Ok(movie);
         }
@@ -64,9 +64,9 @@ namespace TestWebAPPEF.Controllers
             }
 
 
-            var movie1=await _movieInterface.PutMovie(id, movie);
+            var movie1 = await _movieInterface.PutMovie(id, movie);
 
-            if(movie1 == null)
+            if (movie1 == null)
             {
                 return NotFound();
             }
@@ -78,7 +78,7 @@ namespace TestWebAPPEF.Controllers
         [HttpPost]
         public async Task<ActionResult<MovieDto>> PostMovie(MovieDto movie)
         {
-            var movie1 =await _movieInterface.PostMovie(movie);
+            var movie1 = await _movieInterface.PostMovie(movie);
 
             if (movie1 == null)
             {
@@ -102,6 +102,6 @@ namespace TestWebAPPEF.Controllers
             return NoContent();
         }
 
-  
+
     }
 }

@@ -1,9 +1,9 @@
+using BackEnd.Data;
+using BackEnd.Services;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using TestWebAPPEF.Data;
-using TestWebAPPEF.Models;
-using TestWebAPPEF.Services;
+using BackEnd.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<TestEFContext>(options =>

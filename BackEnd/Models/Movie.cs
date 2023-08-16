@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Xml.Linq;
 
-namespace TestWebAPPEF.Models
+namespace BackEnd.Models
 {
     public class Movie
     {

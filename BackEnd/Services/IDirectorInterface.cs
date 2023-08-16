@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using TestWebAPPEF.Models;
+﻿using BackEnd.Models;
+using Microsoft.AspNetCore.Mvc;
 
-namespace TestWebAPPEF.Services
+namespace BackEnd.Services
 {
     public interface IDirectorInterface
     {

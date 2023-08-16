@@ -1,12 +1,12 @@
-﻿using Mapster;
+﻿using BackEnd.Data;
+using BackEnd.Models;
+using Mapster;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using TestWebAPPEF.Data;
-using TestWebAPPEF.Models;
 
-namespace TestWebAPPEF.Services
+namespace BackEnd.Services
 {
-    public class MovieService:IMovieInterface
+    public class MovieService : IMovieInterface
     {
         private readonly TestEFContext _context;
 
@@ -21,7 +21,7 @@ namespace TestWebAPPEF.Services
                 return default;
             }
 
-            var movies= _context.Movie.Adapt<List<MovieDto>>();
+            var movies = _context.Movie.Adapt<List<MovieDto>>();
             return movies;
         }
 
@@ -74,18 +74,18 @@ namespace TestWebAPPEF.Services
             return movie;
         }
 
-        public async  Task<Movie> PutMovie(int id, MovieDto movie)
+        public async Task<Movie> PutMovie(int id, MovieDto movie)
         {
             if (id != movie.Id)
             {
                 return null;
             }
-            var movies =movie.Adapt<Movie>();
+            var movies = movie.Adapt<Movie>();
             _context.Entry(movies).State = EntityState.Modified;
 
             try
             {
-               await  _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
