@@ -14,17 +14,19 @@ namespace BackEnd.Data
         {
         }
 
-        public DbSet<Movie> Movie { get; set; } = default!;
+        public DbSet<Movie>? Movie { get; set; } = default!;
+        public DbSet<Producer>? Producer { get; set; } 
+
+        public DbSet<Director>? Director { get; set; } = default!;
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Movie>().HasOne<Producer>().WithMany().HasForeignKey(v => v.ProducerId);
+            modelBuilder.Entity<Movie>().HasOne<Director>().WithMany().HasForeignKey(v => v.DirectorId);
         }
 
 
-
-        public DbSet<Producer>? Producer { get; set; }
-
-        public DbSet<Director>? Director { get; set; }
+  
     }
 }

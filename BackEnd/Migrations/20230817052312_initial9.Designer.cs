@@ -8,22 +8,22 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace TestWebAPPEF.Migrations
+namespace BackEnd.Migrations
 {
     [DbContext(typeof(TestEFContext))]
-    [Migration("20230711111236_new")]
-    partial class @new
+    [Migration("20230817052312_initial9")]
+    partial class initial9
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.19")
+                .HasAnnotation("ProductVersion", "6.0.21")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("TestWebAPPEF.Models.Director", b =>
+            modelBuilder.Entity("BackEnd.Models.Director", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -43,7 +43,7 @@ namespace TestWebAPPEF.Migrations
                     b.ToTable("Director");
                 });
 
-            modelBuilder.Entity("TestWebAPPEF.Models.Movie", b =>
+            modelBuilder.Entity("BackEnd.Models.Movie", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -51,10 +51,14 @@ namespace TestWebAPPEF.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("DiredctorIdId")
+                    b.Property<int>("DirectorId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ProducerIDId")
+                    b.Property<string>("Language")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ProducerId")
                         .HasColumnType("int");
 
                     b.Property<int>("ReleaseYear")
@@ -64,20 +68,16 @@ namespace TestWebAPPEF.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("language")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("DiredctorIdId");
+                    b.HasIndex("DirectorId");
 
-                    b.HasIndex("ProducerIDId");
+                    b.HasIndex("ProducerId");
 
                     b.ToTable("Movie");
                 });
 
-            modelBuilder.Entity("TestWebAPPEF.Models.Producer", b =>
+            modelBuilder.Entity("BackEnd.Models.Producer", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -97,23 +97,19 @@ namespace TestWebAPPEF.Migrations
                     b.ToTable("Producer");
                 });
 
-            modelBuilder.Entity("TestWebAPPEF.Models.Movie", b =>
+            modelBuilder.Entity("BackEnd.Models.Movie", b =>
                 {
-                    b.HasOne("TestWebAPPEF.Models.Director", "DiredctorId")
+                    b.HasOne("BackEnd.Models.Director", null)
                         .WithMany()
-                        .HasForeignKey("DiredctorIdId")
+                        .HasForeignKey("DirectorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TestWebAPPEF.Models.Producer", "ProducerID")
+                    b.HasOne("BackEnd.Models.Producer", null)
                         .WithMany()
-                        .HasForeignKey("ProducerIDId")
+                        .HasForeignKey("ProducerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("DiredctorId");
-
-                    b.Navigation("ProducerID");
                 });
 #pragma warning restore 612, 618
         }

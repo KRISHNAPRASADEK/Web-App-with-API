@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace TestWebAPPEF.Migrations
+namespace BackEnd.Migrations
 {
     [DbContext(typeof(TestEFContext))]
     partial class TestEFContextModelSnapshot : ModelSnapshot
@@ -16,12 +16,12 @@ namespace TestWebAPPEF.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.19")
+                .HasAnnotation("ProductVersion", "6.0.21")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("TestWebAPPEF.Models.Director", b =>
+            modelBuilder.Entity("BackEnd.Models.Director", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -41,13 +41,16 @@ namespace TestWebAPPEF.Migrations
                     b.ToTable("Director");
                 });
 
-            modelBuilder.Entity("TestWebAPPEF.Models.Movie", b =>
+            modelBuilder.Entity("BackEnd.Models.Movie", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("DirectorId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Language")
                         .IsRequired()
@@ -65,12 +68,14 @@ namespace TestWebAPPEF.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("DirectorId");
+
                     b.HasIndex("ProducerId");
 
                     b.ToTable("Movie");
                 });
 
-            modelBuilder.Entity("TestWebAPPEF.Models.Producer", b =>
+            modelBuilder.Entity("BackEnd.Models.Producer", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -90,9 +95,15 @@ namespace TestWebAPPEF.Migrations
                     b.ToTable("Producer");
                 });
 
-            modelBuilder.Entity("TestWebAPPEF.Models.Movie", b =>
+            modelBuilder.Entity("BackEnd.Models.Movie", b =>
                 {
-                    b.HasOne("TestWebAPPEF.Models.Producer", null)
+                    b.HasOne("BackEnd.Models.Director", null)
+                        .WithMany()
+                        .HasForeignKey("DirectorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BackEnd.Models.Producer", null)
                         .WithMany()
                         .HasForeignKey("ProducerId")
                         .OnDelete(DeleteBehavior.Cascade)

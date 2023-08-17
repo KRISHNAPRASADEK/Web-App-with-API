@@ -85,7 +85,7 @@ namespace BackEnd.Controllers
                 return Problem("Entity set 'TestEFContext.Movie'  is null.");
             }
 
-            return CreatedAtAction("GetMovie", new { id = movie1.Id }, movie1);
+            return CreatedAtAction("Get", new { id = movie1.Id }, movie1);
         }
 
         // DELETE: api/Movies/5

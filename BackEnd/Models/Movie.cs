@@ -11,5 +11,6 @@ namespace BackEnd.Models
         public string Language { get; set; }
         public int ReleaseYear { get; set; }
         public int ProducerId { get; set; }
+        public int DirectorId { get; set; }
     }
 }

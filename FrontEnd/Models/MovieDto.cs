@@ -1,6 +1,6 @@
-﻿using Humanizer;
+﻿
 
-namespace BackEnd.Models
+namespace FrontEnd.Models
 {
     public class MovieDto
     {
