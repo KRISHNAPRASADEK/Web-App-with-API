@@ -52,7 +52,6 @@ namespace BackEnd.Controllers
             return Ok(director);
         }
 
-        // PUT: api/Movies/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, DirectorDto director)
@@ -87,7 +86,6 @@ namespace BackEnd.Controllers
             return CreatedAtAction("Get", new { id = director1.Id }, director1);
         }
 
-        // DELETE: api/Movies/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
