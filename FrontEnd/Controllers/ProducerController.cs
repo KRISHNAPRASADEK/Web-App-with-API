@@ -24,7 +24,6 @@ namespace FrontEnd.Controllers
             {
                 string data=response.Content.ReadAsStringAsync().Result;
                 modellist=JsonConvert.DeserializeObject<List<ProducerDto>>(data);
-                
             }
             return View(modellist);
         }
@@ -34,31 +33,22 @@ namespace FrontEnd.Controllers
             return View();
         }
 
-
         [HttpPost]
-        public ActionResult Edit(ProducerDto model)
+        public ActionResult Create(ProducerDto model)
         {
             string data = JsonConvert.SerializeObject(model);
             StringContent content = new StringContent(data, System.Text.Encoding.UTF8, "application/json");
-            HttpResponseMessage response = client.PutAsync(client.BaseAddress + "/Producers/" + model.Id, content).Result;
-            if (response.IsSuccessStatusCode)
-            {
-                return RedirectToAction("ProducerView");
-            }
-            return View();
-        }
-
-        [HttpPost]
-        public ActionResult Create(ProducerDto model)
-                                      {
-            string data=JsonConvert.SerializeObject(model);
-            StringContent content=new StringContent(data,System.Text.Encoding.UTF8,"application/json");
             HttpResponseMessage response = client.PostAsync(client.BaseAddress + "/Producers", content).Result;
             if (response.IsSuccessStatusCode)
             {
+                TempData["SuccessMessage"] = "Created Successfully";
                 return RedirectToAction("ProducerView");
             }
-                return View();
+            else
+            {
+                TempData["ErrorMessage"] = "Failed to Post";
+            }
+            return View();
         }
 
         public ActionResult Edit(int Id)
@@ -72,9 +62,26 @@ namespace FrontEnd.Controllers
                 model = JsonConvert.DeserializeObject<ProducerDto>(data);
 
             }
-            return View("Create",model);
+            return View("Create", model);
         }
 
+        [HttpPost]
+        public ActionResult Edit(ProducerDto model)
+        {
+            string data = JsonConvert.SerializeObject(model);
+            StringContent content = new StringContent(data, System.Text.Encoding.UTF8, "application/json");
+            HttpResponseMessage response = client.PutAsync(client.BaseAddress + "/Producers/" + model.Id, content).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                TempData["SuccessMessage"] = "Producer Edited Successfully";
+                return RedirectToAction("ProducerView");
+            }
+            else 
+            {
+                TempData["ErrorMessage"] = "Failed to Edit Producer"; 
+            }
+            return View();
+        }
         
         public ActionResult Delete(int Id)
         {
@@ -83,7 +90,12 @@ namespace FrontEnd.Controllers
             if (response.IsSuccessStatusCode)
             {
                 string data = response.Content.ReadAsStringAsync().Result;
+                TempData["SuccessMessage"] = "Deleted Successfully";
                 return RedirectToAction("ProducerView");
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Failed to Delete";
             }
             return View();
         }

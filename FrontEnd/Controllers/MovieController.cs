@@ -34,31 +34,17 @@ namespace FrontEnd.Controllers
             return View();
         }
 
-
         [HttpPost]
-        public ActionResult Edit(MovieDto model)
+        public ActionResult Create(MovieDto model)
         {
             string data = JsonConvert.SerializeObject(model);
             StringContent content = new StringContent(data, System.Text.Encoding.UTF8, "application/json");
-            HttpResponseMessage response = client.PutAsync(client.BaseAddress + "/Movies/" + model.Id, content).Result;
-            if (response.IsSuccessStatusCode)
-            {
-                return RedirectToAction("MovieView");
-            }
-            return View();
-        }
-
-        [HttpPost]
-        public ActionResult Create(MovieDto model)
-                                      {
-            string data=JsonConvert.SerializeObject(model);
-            StringContent content=new StringContent(data,System.Text.Encoding.UTF8,"application/json");
             HttpResponseMessage response = client.PostAsync(client.BaseAddress + "/Movies", content).Result;
             if (response.IsSuccessStatusCode)
             {
                 return RedirectToAction("MovieView");
             }
-                return View();
+            return View();
         }
 
         public ActionResult Edit(int Id)
@@ -72,9 +58,21 @@ namespace FrontEnd.Controllers
                 model = JsonConvert.DeserializeObject<MovieDto>(data);
 
             }
-            return View("Create",model);
+            return View("Create", model);
         }
 
+        [HttpPost]
+        public ActionResult Edit(MovieDto model)
+        {
+            string data = JsonConvert.SerializeObject(model);
+            StringContent content = new StringContent(data, System.Text.Encoding.UTF8, "application/json");
+            HttpResponseMessage response = client.PutAsync(client.BaseAddress + "/Movies/" + model.Id, content).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                return RedirectToAction("MovieView");
+            }
+            return View();
+        }
         
         public ActionResult Delete(int Id)
         {

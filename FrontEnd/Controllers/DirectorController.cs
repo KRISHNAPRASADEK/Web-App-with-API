@@ -34,6 +34,32 @@ namespace FrontEnd.Controllers
             return View();
         }
 
+        [HttpPost]
+        public ActionResult Create(DirectorDto model)
+        {
+            string data = JsonConvert.SerializeObject(model);
+            StringContent content = new StringContent(data, System.Text.Encoding.UTF8, "application/json");
+            HttpResponseMessage response = client.PostAsync(client.BaseAddress + "/Directors", content).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                return RedirectToAction("DirectorView");
+            }
+            return View();
+        }
+
+        public ActionResult Edit(int Id)
+        {
+            DirectorDto model = new DirectorDto();
+            HttpResponseMessage response = client.GetAsync(client.BaseAddress + "/Directors/" + Id).Result;
+
+            if (response.IsSuccessStatusCode)
+            {
+                string data = response.Content.ReadAsStringAsync().Result;
+                model = JsonConvert.DeserializeObject<DirectorDto>(data);
+
+            }
+            return View("Create", model);
+        }
 
         [HttpPost]
         public ActionResult Edit(DirectorDto model)
@@ -47,34 +73,6 @@ namespace FrontEnd.Controllers
             }
             return View();
         }
-
-        [HttpPost]
-        public ActionResult Create(DirectorDto model)
-                                      {
-            string data=JsonConvert.SerializeObject(model);
-            StringContent content=new StringContent(data,System.Text.Encoding.UTF8,"application/json");
-            HttpResponseMessage response = client.PostAsync(client.BaseAddress + "/Directors", content).Result;
-            if (response.IsSuccessStatusCode)
-            {
-                return RedirectToAction("DirectorView");
-            }
-                return View();
-        }
-
-        public ActionResult Edit(int Id)
-        {
-            DirectorDto model = new DirectorDto();
-            HttpResponseMessage response = client.GetAsync(client.BaseAddress + "/Directors/"+Id).Result;
-
-            if (response.IsSuccessStatusCode)
-            {
-                string data = response.Content.ReadAsStringAsync().Result;
-                model = JsonConvert.DeserializeObject<DirectorDto>(data);
-
-            }
-            return View("Create",model);
-        }
-
         
         public ActionResult Delete(int Id)
         {
