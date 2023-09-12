@@ -3,6 +3,7 @@ using BackEnd.Models;
 using Mapster;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Transactions;
 
 namespace BackEnd.Services
 {
@@ -25,6 +26,40 @@ namespace BackEnd.Services
             return movies;
         }
 
+        public async Task<IEnumerable<MovieDetailes>> GetMovieDetailes()
+        {
+            if (_context.Movie == null)
+            {
+                return default;
+            }
+
+            //var result = from a in _context.Movie
+            //             join b in _context.Director
+            //             on a.DirectorId equals b.Id
+            //             join c in _context.Producer
+            //             on a.ProducerId equals c.Id
+
+            //             //where a.Title.StartsWith("f") 
+            //             //orderby b.Name 
+            //             select new { MovieId = a.Id, MovieName = a.Title, DirectorName = b.Name, ProducerName = c.Name };
+
+            var result = _context.Movie.Join(_context.Director, M => M.DirectorId, D => D.Id, (M, D) => new { M, D })
+                .Join(_context.Producer, MD => MD.M.ProducerId, P => P.Id, (MD, P) => new { MD, P })
+                .Where(MDP => MDP.P.Name.StartsWith("F"))
+                .OrderBy(MDP => MDP.MD.M.Title)
+                .Select(s => new
+                {
+                    MovieId = s.MD.M.Id,
+                    MovieName = s.MD.M.Title,
+                    DirectorName = s.MD.D.Name,
+                    ProducerName = s.P.Name
+                });
+
+            var movies = result.Adapt<List<MovieDetailes>>();
+
+            return movies;
+        }
+
         public async Task<MovieDto> Get(int id)
         {
             if (_context.Movie == null)
@@ -44,16 +79,28 @@ namespace BackEnd.Services
 
         public async Task<Movie> PostMovie(MovieDto movie)
         {
-            if (_context.Movie == null)
+            using(TransactionScope transactionScope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
-                return null;
+                try
+                {
+                    if (_context.Movie == null)
+                    {
+                        return null;
+                    }
+
+                    var movie1 = movie.Adapt<Movie>();
+                    _context.Movie.Add(movie1);
+                    await _context.SaveChangesAsync();
+                    transactionScope.Complete(); 
+                    return movie1;
+
+                }
+                catch (Exception ex)
+                {
+                    transactionScope.Dispose();
+                    throw ex;
+                }
             }
-
-            var movie1 = movie.Adapt<Movie>();
-            _context.Movie.Add(movie1);
-            await _context.SaveChangesAsync();
-
-            return movie1;
         }
 
         public async Task<Movie> DeleteMovie(int id)

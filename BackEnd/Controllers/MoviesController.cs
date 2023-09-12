@@ -37,6 +37,19 @@ namespace BackEnd.Controllers
             return movie;
         }
 
+        [HttpGet("Detailes")]
+        public async Task<IEnumerable<MovieDetailes>> GetMovieDetailes()
+        {
+            var movie = await _movieInterface.GetMovieDetailes();
+
+            if (movie == null)
+            {
+                return default;
+            }
+
+            return movie;
+        }
+
 
         [HttpGet("{id}")]
         public async Task<ActionResult<MovieDto>> Get(int id)
