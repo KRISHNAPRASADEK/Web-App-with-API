@@ -16,76 +16,108 @@ namespace BackEnd.Services
         }
         public async Task<IEnumerable<ProducerDto>> GetAll()
         {
-            if (_context.Producer == null)
+            try
             {
-                return default;
-            }
+                if (_context.Producer == null)
+                {
+                    return default;
+                }
 
-            var producers = _context.Producer.Adapt<List<ProducerDto>>();
-            return producers;
+                var producers = _context.Producer.Adapt<List<ProducerDto>>();
+                return producers;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            
         }
 
         public async Task<ProducerDto> Get(int id)
         {
-            if (_context.Producer == null)
+            try
             {
-                return null;
-            }
-            var movie = _context.Producer.Find(id).Adapt<ProducerDto>();
+                if (_context.Producer == null)
+                {
+                    return null;
+                }
+                var movie = _context.Producer.Find(id).Adapt<ProducerDto>();
 
-            if (movie == null)
+                if (movie == null)
+                {
+                    return null;
+                }
+
+
+                return movie;
+            }
+            catch (Exception ex)
             {
-                return null;
+                throw ex;
             }
-
-
-            return movie;
         }
 
         public async Task<Producer> Post(ProducerDto producer)
         {
-            if (_context.Producer == null)
+            try
             {
-                return null;
+                if (_context.Producer == null)
+                {
+                    return null;
+                }
+
+                var producer1 = producer.Adapt<Producer>();
+                _context.Producer.Add(producer1);
+                await _context.SaveChangesAsync();
+
+                return producer1;
+
             }
-
-            var producer1 = producer.Adapt<Producer>();
-            _context.Producer.Add(producer1);
-            await _context.SaveChangesAsync();
-
-            return producer1;
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         public async Task<Producer> Delete(int id)
         {
-            if (_context.Producer == null)
+            try
             {
-                return null;
+                if (_context.Producer == null)
+                {
+                    return null;
+                }
+                var producer = await _context.Producer.FindAsync(id);
+                if (producer == null)
+                {
+                    return null;
+                }
+
+                _context.Producer.Remove(producer);
+                await _context.SaveChangesAsync();
+
+                return producer;
             }
-            var producer = await _context.Producer.FindAsync(id);
-            if (producer == null)
+            catch (Exception ex)
             {
-                return null;
+                throw ex;
             }
-
-            _context.Producer.Remove(producer);
-            await _context.SaveChangesAsync();
-
-            return producer;
+            
         }
 
         public async Task<Producer> Put(int id, ProducerDto producer)
         {
-            if (id != producer.Id)
-            {
-                return null;
-            }
-            var producers = producer.Adapt<Producer>();
-            _context.Entry(producers).State = EntityState.Modified;
-
             try
             {
+                if (id != producer.Id)
+                {
+                    return null;
+                }
+                var producers = producer.Adapt<Producer>();
+                _context.Entry(producers).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
+
+                return producers;
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -98,8 +130,6 @@ namespace BackEnd.Services
                     throw;
                 }
             }
-
-            return producers;
         }
 
         private bool ProducerExists(int id)

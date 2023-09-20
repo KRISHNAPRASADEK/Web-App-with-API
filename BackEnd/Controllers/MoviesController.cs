@@ -98,7 +98,7 @@ namespace BackEnd.Controllers
                 return Problem("Entity set 'TestEFContext.Movie'  is null.");
             }
 
-                return CreatedAtAction("Get", new { id = movie1.Id }, movie1);
+                return Ok(movie1);
         }
 
         // DELETE: api/Movies/5
@@ -112,7 +112,7 @@ namespace BackEnd.Controllers
                 return NotFound();
             }
 
-            return NoContent();
+            return Ok(movie);
         }
 
 

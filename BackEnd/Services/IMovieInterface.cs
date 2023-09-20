@@ -8,8 +8,8 @@ namespace BackEnd.Services
         Task<IEnumerable<MovieDto>> GetMovies();
         Task<IEnumerable<MovieDetailes>> GetMovieDetailes();
         Task<MovieDto> Get(int id);
-        Task<Movie> PostMovie(MovieDto movie);
-        Task<Movie> DeleteMovie(int id);
-        Task<Movie> PutMovie(int id, MovieDto movie);
+        Task<string> PostMovie(MovieDto movie);
+        Task<string> DeleteMovie(int id);
+        Task<string> PutMovie(int id, MovieDto movie);
     }
 }
