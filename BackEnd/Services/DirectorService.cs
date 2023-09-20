@@ -2,17 +2,21 @@
 using BackEnd.Models;
 using Mapster;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Dapper;
 
 namespace BackEnd.Services
 {
     public class DirectorService : IDirectorInterface
     {
         private readonly TestEFContext _context;
+        private readonly IConfiguration _configuration;
 
-        public DirectorService(TestEFContext context)
+        public DirectorService(TestEFContext context, IConfiguration configuration)
         {
             _context = context;
+            _configuration = configuration;
         }
         public async Task<IEnumerable<DirectorDto>> GetAll()
         {
@@ -23,6 +27,31 @@ namespace BackEnd.Services
 
             var directors = _context.Director.Adapt<List<DirectorDto>>();
             return directors;
+        }
+        public async Task<IEnumerable<DirectorDetailes>> GetDirectorDetailes()
+        {
+            if (_context.Director == null)
+            {
+                return default;
+            }
+
+            string conn = _configuration.GetConnectionString("TestEFContext");
+            using (var connection = new SqlConnection(conn))
+            {
+                connection.Open();
+                string query = @"select MovieName=m.Title, DirectorName = d.Name, ProducerName = p.Name
+                                   from Director d
+                                   inner join Movie m on d.Id = m.DirectorId 
+                                   inner join Producer p on p.Id = m.ProducerId
+                                   where m.Title LIKE 'd%'";
+                var result = connection.Query(query).ToList();
+                var directors = result.Adapt<List<DirectorDetailes>>();
+
+                return directors;
+            }
+
+            //var directors = _context.Director.Adapt<List<DirectorDto>>();
+            //return directors;
         }
 
         public async Task<DirectorDto> Get(int id)

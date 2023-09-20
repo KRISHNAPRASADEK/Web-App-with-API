@@ -36,6 +36,19 @@ namespace BackEnd.Controllers
             return director;
         }
 
+        [HttpGet("Detailes")]
+        public async Task<IEnumerable<DirectorDetailes>> GetDirectorDetailes()
+        {
+            var director = await _directorInterface.GetDirectorDetailes();
+
+            if (director == null)
+            {
+                return default;
+            }
+
+            return director;
+        }
+
 
         [HttpGet("{id}")]
         public async Task<ActionResult<DirectorDto>> Get(int id)

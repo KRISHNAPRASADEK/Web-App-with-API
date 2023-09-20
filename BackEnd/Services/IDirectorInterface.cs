@@ -6,6 +6,7 @@ namespace BackEnd.Services
     public interface IDirectorInterface
     {
         Task<IEnumerable<DirectorDto>> GetAll();
+        Task<IEnumerable<DirectorDetailes>> GetDirectorDetailes();
         Task<DirectorDto> Get(int id);
         Task<Director> Post(DirectorDto director);
         Task<Director> Delete(int id);
